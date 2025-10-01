@@ -1,34 +1,24 @@
 import { Outlet, Link, useLocation} from "react-router-dom";
-import { useState } from "react";
-import { LogOut, ChevronLeft, ChevronRight } from "lucide-react"; // si usás este ícono
 import '../Css/Layout.css'
 import logo from '../assets/logo.png'
 
 const Layout = () => {
-    const location = useLocation(); // para saber en qué ruta estás
-    const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  
-    const toggleSidebar = () => {
-      setSidebarExpanded(!sidebarExpanded);
-    };
+    const location = useLocation();
     
     return(
-    <div className={`layout ${sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed'}`}>
-    <aside className={`sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
+    <div className={`layout`}>
+    <aside className={`sidebar`}>
       <div className="sidebar-header">
-        <img src={logo} className='logo'/>
-        <button className="toggle-sidebar-btn" onClick={toggleSidebar}>
-          {sidebarExpanded ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
+        <img src={logo} className='logo' alt="MailAméricas"/>
       </div>
       
-      <nav className={sidebarExpanded ? 'visible' : 'hidden'}>
+      <nav className={'visible'}>
         <ul>
+          <li className={location.pathname === "/" ? "active" : ""}>
+            <Link to="/">Inicio</Link>
+          </li>
           <li className={location.pathname === "/Dashboard" ? "active" : ""}>
             <Link to="/Dashboard">Dashboard</Link>
-          </li>
-          <li className={location.pathname === "/Formulario" ? "active" : ""}>
-            <Link to="/Formulario">Formulario</Link>
           </li>
         </ul>
       </nav>

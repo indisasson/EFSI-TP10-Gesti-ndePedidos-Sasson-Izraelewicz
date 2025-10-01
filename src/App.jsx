@@ -4,6 +4,7 @@ import './App.css'
 import Formulario from './Views/Formulario.jsx'
 import Layout from'./Views/Layout.jsx'
 import Dashboard from './Views/Dashboard.jsx'
+import Home from './Views/Home.jsx'
 
 function App() {
 
@@ -12,8 +13,9 @@ function App() {
      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
           <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Formulario/" element={<Formulario />} />
+          <Route path="/Formulario" element={<Formulario />} />
         </Route>
       </Routes>
      </BrowserRouter>
