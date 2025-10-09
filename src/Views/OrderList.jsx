@@ -19,6 +19,7 @@ OrderList.propTypes = {
     orders: PropTypes.arrayOf(
         PropTypes.exact({
             id: PropTypes.number.isRequired,
+            customerId: PropTypes.number.isRequired,
             customer: PropTypes.string.isRequired,
             items: PropTypes.array.isRequired,
             status: PropTypes.oneOf(['pending', 'shipped', 'delivered']),

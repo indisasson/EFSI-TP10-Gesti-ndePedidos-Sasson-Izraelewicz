@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import '../Css/Dashboard.css'
 
 const emptyOrder = {
+    customerId: '',
     customer: '',
     status: 'pending',
     date: new Date(),
@@ -28,6 +29,8 @@ const Formulario = ({ onSubmit }) => {
     }
 
     const isValid = useMemo(() => {
+        const customerIdNum = Number(order.customerId)
+        if (!Number.isFinite(customerIdNum) || customerIdNum <= 0) return false
         if (typeof order.customer !== 'string' || order.customer.trim().length < 3) return false
         if (!['pending', 'shipped', 'delivered'].includes(order.status)) return false
         if (!(order.date instanceof Date)) return false
@@ -48,7 +51,7 @@ const Formulario = ({ onSubmit }) => {
         e.preventDefault()
         if (!isValid) return
         const normalized = {
-            id: Date.now(),
+            customerId: Number(order.customerId),
             customer: order.customer.trim(),
             status: order.status,
             date: order.date,
@@ -67,6 +70,10 @@ const Formulario = ({ onSubmit }) => {
         <div className="formulario">
             <h2>Nuevo pedido</h2>
             <form onSubmit={handleSubmit}>
+                <div>
+                    <label>ID Cliente</label>
+                    <input placeholder="customerId" value={order.customerId} onChange={(e) => setOrder({ ...order, customerId: e.target.value })} />
+                </div>
                 <div>
                     <label>Cliente</label>
                     <input value={order.customer} onChange={(e) => setOrder({ ...order, customer: e.target.value })} />

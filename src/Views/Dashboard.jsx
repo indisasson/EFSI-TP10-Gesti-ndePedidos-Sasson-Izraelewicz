@@ -8,6 +8,7 @@ import Formulario from './Formulario'
 const initialOrders = [
     {
         id: 1,
+        customerId: 101,
         customer: 'Juan Pérez',
         date: new Date('2025-09-12'),
         status: 'pending',
@@ -18,6 +19,7 @@ const initialOrders = [
     },
     {
         id: 2,
+        customerId: 102,
         customer: 'María Gómez',
         date: new Date('2025-09-18'),
         status: 'shipped',
@@ -27,6 +29,7 @@ const initialOrders = [
     },
     {
         id: 3,
+        customerId: 103,
         customer: 'Carlos López',
         date: new Date('2025-09-20'),
         status: 'delivered',
@@ -61,7 +64,13 @@ const Dashboard = () => {
             <OrderStats total={stats.total} pending={stats.pending} shipped={stats.shipped} delivered={stats.delivered} />
             <OrderList orders={filtered} />
             <div style={{ marginTop: 24 }}>
-                <Formulario onSubmit={(order) => setOrders((prev) => [...prev, order])} />
+                <Formulario onSubmit={(order) => {
+                    setOrders((previousOrders) => {
+                        const maxExistingId = previousOrders.reduce((maxId, current) => Math.max(maxId, current.id), 0)
+                        const nextId = maxExistingId + 1
+                        return [...previousOrders, { ...order, id: nextId }]
+                    })
+                }} />
             </div>
         </div>
     )

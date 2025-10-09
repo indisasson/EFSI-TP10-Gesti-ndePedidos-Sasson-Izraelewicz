@@ -2,14 +2,14 @@ import PropTypes from 'prop-types'
 
 const currencyFormatter = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' })
 
-const OrderItem = ({ id, customer, date, status, items }) => {
+const OrderItem = ({ id, customerId, customer, date, status, items }) => {
     const total = items.reduce((sum, it) => sum + it.quantity * it.price, 0)
     const formattedDate = date instanceof Date ? date.toLocaleDateString('es-AR') : new Date(date).toLocaleDateString('es-AR')
 
     return (
         <div className="order-item">
             <div className="order-header">
-                <strong>#{id}</strong> · {customer} · {formattedDate} · <span className={`status ${status}`}>{status}</span>
+             · Cliente {customerId} · {customer} · {formattedDate} · <span className={`status ${status}`}>{status}</span>
             </div>
             <ul className="order-products">
                 {items.map((p) => (
@@ -28,6 +28,7 @@ const OrderItem = ({ id, customer, date, status, items }) => {
 
 OrderItem.propTypes = {
     id: PropTypes.number.isRequired,
+    customerId: PropTypes.number.isRequired,
     customer: (props, propName, componentName) => {
         const value = props[propName]
         if (typeof value !== 'string') return new Error(`${componentName}: customer debe ser string`)
