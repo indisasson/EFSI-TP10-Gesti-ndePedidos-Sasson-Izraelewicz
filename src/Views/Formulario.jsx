@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import '../Css/Dashboard.css'
+import { useOrders } from './Dashboard'
 
 const emptyOrder = {
     customerId: '',
@@ -11,6 +12,7 @@ const emptyOrder = {
 }
 
 const Formulario = ({ onSubmit }) => {
+    const { addOrder } = useOrders?.() || { addOrder: undefined }
     const [order, setOrder] = useState(emptyOrder)
 
     const addItem = () => {
@@ -62,7 +64,11 @@ const Formulario = ({ onSubmit }) => {
                 price: Number(it.price),
             })),
         }
-        onSubmit?.(normalized)
+        if (onSubmit) {
+            onSubmit(normalized)
+        } else if (typeof addOrder === 'function') {
+            addOrder(normalized)
+        }
         setOrder(emptyOrder)
     }
 

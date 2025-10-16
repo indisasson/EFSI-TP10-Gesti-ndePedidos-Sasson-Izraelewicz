@@ -1,35 +1,43 @@
 import { Outlet, Link, useLocation} from "react-router-dom";
 import '../Css/Layout.css'
-import logo from '../assets/logo.png'
+import Dashboard, { OrdersProvider } from './Dashboard'
+import Footer from '../components/Footer'
+
 
 const Layout = () => {
     const location = useLocation();
     
     return(
-    <div className={`layout`}>
-    <aside className={`sidebar`}>
-      <div className="sidebar-header">
-        <img src={logo} className='logo' alt="MailAméricas"/>
-      </div>
-      
-      <nav className={'visible'}>
-        <ul>
-          <li className={location.pathname === "/" ? "active" : ""}>
-            <Link to="/">Inicio</Link>
-          </li>
-          <li className={location.pathname === "/Dashboard" ? "active" : ""}>
-            <Link to="/Dashboard">Dashboard</Link>
-          </li>
-        </ul>
-      </nav>
+    <div className={`layout layout-top`}>
+      <header className="topbar">
+        <div className="container">
+          <div className="brand">
+          
+            <span className="brand-name">MailAméricas</span>
+          </div>
+          <nav>
+            <ul>
+              <li className={location.pathname === "/" ? "active" : ""}>
+                <Link to="/">Inicio</Link>
+              </li>
+              <li className={location.pathname === "/Dashboard" ? "active" : ""}>
+                <Link to="/Dashboard">Dashboard</Link>
+              </li>
+              <li className={location.pathname === "/Formulario" ? "active" : ""}>
+                <Link to="/Formulario" className="btn primary">Nuevo Pedido</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
 
-      
-    </aside>
-
-    <main className="content">
-      <Outlet /> 
-    </main>
-  </div>
+      <OrdersProvider>
+        <main className="content container">
+          <Outlet /> 
+        </main>
+        <Footer />
+      </OrdersProvider>
+    </div>
   )
 }
 export default Layout

@@ -5,6 +5,7 @@ const OrderFilter = ({ filter, onChange }) => {
         <div className="order-filter">
             <label htmlFor="statusFilter">Filtrar por estado: </label>
             <select id="statusFilter" value={filter} onChange={(e) => onChange(e.target.value)}>
+                <option value="all">todos</option>
                 <option value="pending">pending</option>
                 <option value="shipped">shipped</option>
                 <option value="delivered">delivered</option>
@@ -14,7 +15,7 @@ const OrderFilter = ({ filter, onChange }) => {
 }
 
 OrderFilter.propTypes = {
-    filter: PropTypes.oneOf(['pending', 'shipped', 'delivered']).isRequired,
+    filter: PropTypes.oneOf(['all', 'pending', 'shipped', 'delivered']).isRequired,
     onChange: PropTypes.func.isRequired,
 }
 
