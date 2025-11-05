@@ -1,9 +1,20 @@
 import { useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import '../Css/Dashboard.css'
 import { useOrders } from './Dashboard'
+import type { NewOrderInput, OrderStatus } from '../types'
 
-const emptyOrder = {
+type Props = { onSubmit?: (order: NewOrderInput) => void }
+
+type DraftItem = { productId: string; name: string; quantity: number | string; price: number | string }
+type DraftOrder = {
+    customerId: string
+    customer: string
+    status: OrderStatus
+    date: Date
+    items: DraftItem[]
+}
+
+const emptyOrder: DraftOrder = {
     customerId: '',
     customer: '',
     status: 'pending',
@@ -11,19 +22,19 @@ const emptyOrder = {
     items: [{ productId: '', name: '', quantity: 1, price: '' }],
 }
 
-const Formulario = ({ onSubmit }) => {
-    const { addOrder } = useOrders?.() || { addOrder: undefined }
-    const [order, setOrder] = useState(emptyOrder)
+const Formulario = ({ onSubmit }: Props) => {
+    const { addOrder } = useOrders?.() || { addOrder: undefined as unknown as (o: NewOrderInput) => void }
+    const [order, setOrder] = useState<DraftOrder>(emptyOrder)
 
     const addItem = () => {
         setOrder((prev) => ({ ...prev, items: [...prev.items, { productId: '', name: '', quantity: 1, price: '' }] }))
     }
 
-    const removeItem = (idx) => {
+    const removeItem = (idx: number) => {
         setOrder((prev) => ({ ...prev, items: prev.items.filter((_, i) => i !== idx) }))
     }
 
-    const updateItem = (idx, field, value) => {
+    const updateItem = (idx: number, field: keyof DraftItem, value: string) => {
         setOrder((prev) => ({
             ...prev,
             items: prev.items.map((it, i) => (i === idx ? { ...it, [field]: value } : it)),
@@ -49,10 +60,10 @@ const Formulario = ({ onSubmit }) => {
         return true
     }, [order])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!isValid) return
-        const normalized = {
+        const normalized: NewOrderInput = {
             customerId: Number(order.customerId),
             customer: order.customer.trim(),
             status: order.status,
@@ -86,7 +97,7 @@ const Formulario = ({ onSubmit }) => {
                 </div>
                 <div>
                     <label>Estado</label>
-                    <select value={order.status} onChange={(e) => setOrder({ ...order, status: e.target.value })}>
+                    <select value={order.status} onChange={(e) => setOrder({ ...order, status: e.target.value as OrderStatus })}>
                         <option value="pending">pending</option>
                         <option value="shipped">shipped</option>
                         <option value="delivered">delivered</option>
@@ -115,10 +126,6 @@ const Formulario = ({ onSubmit }) => {
             </form>
         </div>
     )
-}
-
-Formulario.propTypes = {
-    onSubmit: PropTypes.func,
 }
 
 export default Formulario

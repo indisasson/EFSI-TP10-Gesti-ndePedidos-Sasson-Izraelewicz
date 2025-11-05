@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState, createContext, useContext } from 'react'
+import { useEffect, useMemo, useState, createContext, useContext, type PropsWithChildren } from 'react'
 import OrderFilter from './OrderFilter'
 import OrderList from './OrderList'
 import OrderStats from './OrderStats'
 import { Link } from 'react-router-dom'
 import '../Css/Dashboard.css'
-// Removed embedded Formulario to avoid duplication with standalone route
+import type { Order, NewOrderInput } from '../types'
 
-const initialOrders = [
+const initialOrders: Order[] = [
     {
         id: 1,
         customerId: 101,
@@ -40,18 +40,22 @@ const initialOrders = [
     },
 ]
 
-export const OrdersContext = createContext({ orders: [], addOrder: () => {} })
+interface OrdersContextValue {
+    orders: Order[]
+    addOrder: (order: NewOrderInput) => void
+}
+
+export const OrdersContext = createContext<OrdersContextValue>({ orders: [], addOrder: () => {} })
 
 export const useOrders = () => useContext(OrdersContext)
 
-export const OrdersProvider = ({ children }) => {
-    const [orders, setOrders] = useState(() => {
+export const OrdersProvider = ({ children }: PropsWithChildren) => {
+    const [orders, setOrders] = useState<Order[]>(() => {
         try {
             const raw = localStorage.getItem('orders')
             if (raw) {
-                const parsed = JSON.parse(raw)
-                // revive dates
-                return Array.isArray(parsed) ? parsed.map(o => ({ ...o, date: new Date(o.date) })) : initialOrders
+                const parsed = JSON.parse(raw) as Omit<Order, 'date'>[]
+                return Array.isArray(parsed) ? parsed.map(o => ({ ...o, date: new Date((o as any).date) })) : initialOrders
             }
         } catch {}
         return initialOrders
@@ -63,7 +67,7 @@ export const OrdersProvider = ({ children }) => {
         } catch {}
     }, [orders])
 
-    const addOrder = (order) => {
+    const addOrder = (order: NewOrderInput) => {
         setOrders((previousOrders) => {
             const maxExistingId = previousOrders.reduce((maxId, current) => Math.max(maxId, current.id), 0)
             const nextId = maxExistingId + 1
@@ -80,7 +84,7 @@ export const OrdersProvider = ({ children }) => {
 
 const Dashboard = () => {
     const { orders } = useOrders()
-    const [filter, setFilter] = useState('all')
+    const [filter, setFilter] = useState<'all' | 'pending' | 'shipped' | 'delivered'>('all')
 
     const filtered = useMemo(() => {
         if (filter === 'all') return orders
@@ -105,9 +109,12 @@ const Dashboard = () => {
             </div>
             <OrderFilter filter={filter} onChange={setFilter} />
             <OrderStats total={stats.total} pending={stats.pending} shipped={stats.shipped} delivered={stats.delivered} />
+            <h3 style={{ marginTop: 12, marginBottom: 8 }}>Pedidos</h3>
             <OrderList orders={filtered} />
         </div>
     )
 }
 
 export default Dashboard
+
+

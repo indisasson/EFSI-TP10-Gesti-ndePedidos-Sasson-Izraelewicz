@@ -1,18 +1,16 @@
-import { Outlet, Link, useLocation} from "react-router-dom";
+import { Outlet, Link, useLocation } from 'react-router-dom'
 import '../Css/Layout.css'
 import Dashboard, { OrdersProvider } from './Dashboard'
 import Footer from '../components/Footer'
 
-
 const Layout = () => {
-    const location = useLocation();
+    const location = useLocation()
     
-    return(
+    return (
     <div className={`layout layout-top`}>
       <header className="topbar">
         <div className="container">
           <div className="brand">
-          
             <span className="brand-name">MailAméricas</span>
           </div>
           <nav>
@@ -22,6 +20,9 @@ const Layout = () => {
               </li>
               <li className={location.pathname === "/Dashboard" ? "active" : ""}>
                 <Link to="/Dashboard">Dashboard</Link>
+              </li>
+              <li className={location.pathname === "/Estadisticas" ? "active" : ""}>
+                <Link to="/Estadisticas">Estadísticas</Link>
               </li>
               <li className={location.pathname === "/Formulario" ? "active" : ""}>
                 <Link to="/Formulario" className="btn primary">Nuevo Pedido</Link>
@@ -41,3 +42,5 @@ const Layout = () => {
   )
 }
 export default Layout
+
+

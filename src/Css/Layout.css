@@ -12,13 +12,14 @@
     backdrop-filter: saturate(180%) blur(10px);
     border-bottom: 1px solid var(--border);
 }
-.topbar .container { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+.topbar .container { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; flex-wrap: nowrap; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-name { font-weight: 800; font-size: xx-large; color: var(--surface-800, #0f3a52); letter-spacing: .2px; }
 
 .logo { height: 34px; width: auto; object-fit: contain; }
 
-.topbar nav ul { display: flex; gap: 10px; align-items: center; list-style: none; padding: 0; margin: 0; }
+.topbar nav { max-width: 100%; overflow-x: auto; }
+.topbar nav ul { display: flex; gap: 10px; align-items: center; list-style: none; padding: 0; margin: 0; flex-wrap: nowrap; white-space: nowrap; }
 .topbar nav ul li a { color: var(--surface-800, #0f3a52); padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; }
 .topbar nav ul li.active a { background: rgba(30,101,144,.08); border-color: rgba(30,101,144,.22); }
 .topbar nav ul li a:hover { background: rgba(30,101,144,.10); }
